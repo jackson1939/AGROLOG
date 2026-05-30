@@ -47,7 +47,9 @@
     @apply bg-surface text-text-1 font-sans antialiased;
   }
 
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     @apply font-serif;
   }
 }
@@ -58,8 +60,13 @@
   }
 
   @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+      background-position: 200% 0;
+    }
+
+    100% {
+      background-position: -200% 0;
+    }
   }
 
   .noise-bg {
@@ -87,9 +94,9 @@
 }
 
 .premium-shadow {
-  box-shadow: 
+  box-shadow:
     0 1px 2px rgba(42, 31, 10, 0.02),
-    0 4px 16px rgba(42, 31, 10, 0.04), 
+    0 4px 16px rgba(42, 31, 10, 0.04),
     0 16px 36px rgba(42, 31, 10, 0.06);
 }
 
@@ -99,8 +106,8 @@
 
 .hover-lift:hover {
   transform: translateY(-3px);
-  box-shadow: 
-    0 4px 20px rgba(42, 31, 10, 0.08), 
+  box-shadow:
+    0 4px 20px rgba(42, 31, 10, 0.08),
     0 12px 32px rgba(42, 31, 10, 0.05);
 }
 
@@ -110,7 +117,7 @@
   right: 0;
   height: 4px;
   background: linear-gradient(90deg, transparent, var(--color-campo-300), var(--color-campo-500), var(--color-campo-300), transparent);
-  box-shadow: 
+  box-shadow:
     0 0 10px var(--color-campo-300),
     0 0 20px var(--color-campo-500);
   animation: scan-vertical 3s infinite ease-in-out;
@@ -123,10 +130,12 @@
     top: 0%;
     opacity: 0.2;
   }
+
   50% {
     top: 98%;
     opacity: 1;
   }
+
   100% {
     top: 0%;
     opacity: 0.2;
@@ -138,13 +147,36 @@
 }
 
 @keyframes pulse-ring {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
+
   50% {
     opacity: .7;
     transform: scale(1.05);
   }
 }
 
+
+@keyframes scan {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
