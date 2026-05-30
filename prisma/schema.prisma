@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  password     String
+  role         Role      @default(AGRONOMO)
+  organizacion String?
+  createdAt    DateTime  @default(now())
+  parcelas     Parcela[]
+  visitas      Visita[]
+  informes     Informe[]
+}
+
+enum Role {
+  AGRONOMO
+  SUPERVISOR
+  ADMIN
+}
+
+model Parcela {
+  id           String   @id @default(cuid())
+  nombre       String
+  cultivo      Cultivo
+  superficie   Float
+  lat          Float
+  lng          Float
+  poligono     Json?
+  productor    String
+  municipio    String
+  departamento String
+  activa       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  visitas      Visita[]
+}
+
+enum Cultivo {
+  SOYA
+  MAIZ
+  QUINUA
+  PAPA
+  TRIGO
+  GIRASOL
+  CITRICOS
+  TOMATE
+  CEBOLLA
+  OTRO
+}
+
+model Visita {
+  id               String      @id @default(cuid())
+  fecha            DateTime
+  fenologia        String
+  observaciones    String      @db.Text
+  fotosUrls        String[]
+  severidad        Severidad   @default(BAJA)
+  temperaturaMin   Float?
+  temperaturaMax   Float?
+  humedad          Float?
+  diagnosticoId    String?
+  diagnostico      Diagnostico? @relation(fields: [diagnosticoId], references: [id])
+  recomendacion    String?     @db.Text
+  productoAplicado String?
+  dosis            String?
+  seguimiento      String?     @db.Text
+  offlineId        String?     @unique
+  syncedAt         DateTime?
+  createdAt        DateTime    @default(now())
+  parcelaId        String
+  parcela          Parcela     @relation(fields: [parcelaId], references: [id])
+  userId           String
+  user             User        @relation(fields: [userId], references: [id])
+}
+
+enum Severidad {
+  BAJA
+  MEDIA
+  ALTA
+  CRITICA
+}
+
+model Diagnostico {
+  id           String   @id @default(cuid())
+  fotoUrl      String
+  hipotesis    Json
+  modelVersion String
+  createdAt    DateTime @default(now())
+  visitas      Visita[]
+}
+
+model Informe {
+  id         String      @id @default(cuid())
+  titulo     String
+  periodo    String
+  tipo       TipoInforme
+  pdfUrl     String?
+  visitasIds String[]
+  metadata   Json
+  createdAt  DateTime    @default(now())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+}
+
+enum TipoInforme {
+  FITOSANITARIO
+  MENSUAL
+  PARCELA
+  CAMPANA
+}
