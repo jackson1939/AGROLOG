@@ -121,6 +121,8 @@ export function InformePDFDocument({
             {v.fotosUrls && v.fotosUrls.length > 0 && (
               <View style={{ flexDirection: 'row', marginTop: 8 }}>
                 {v.fotosUrls.slice(0, 2).map((url, j) => (
+                  // react-pdf Image has no alt prop; not a DOM img element
+                  // eslint-disable-next-line jsx-a11y/alt-text
                   <Image key={j} src={url} style={styles.photo} />
                 ))}
               </View>
