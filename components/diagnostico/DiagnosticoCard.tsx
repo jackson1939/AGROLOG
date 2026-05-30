@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP, gsap } from '@/hooks/useGSAP';
-import { ANIMATION } from '@/lib/utils';
+import { ANIMATION, cn } from '@/lib/utils';
 import type { HipotesisDiagnostico } from '@/types';
 
 interface DiagnosticoCardProps {

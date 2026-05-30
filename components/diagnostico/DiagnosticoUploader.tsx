@@ -70,16 +70,33 @@ export function DiagnosticoUploader({ onAnalyze, loading }: DiagnosticoUploaderP
         className={cn(
           'relative rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-500 overflow-hidden min-h-[280px] flex flex-col justify-center items-center',
           dragOver
-            ? 'border-campo-500 bg-campo-500/10 scale-[1.01] shadow-[0_0_20px_rgba(var(--color-campo-500),0.15)]'
+            ? 'border-campo-500 bg-campo-500/10 scale-[1.01] shadow-[0_0_20px_rgba(22,163,74,0.25)]'
             : 'border-border/80 bg-surface/60 hover:border-campo-500/70 hover:shadow-md',
           loading && 'pointer-events-none ring-2 ring-campo-500/30'
         )}
       >
-        {/* Línea de escaneo láser de alta fidelidad */}
+        {/* Línea de escaneo láser de alta fidelidad con cuadrícula técnica de laboratorio */}
         {preview && loading && (
-          <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
-            <div className="w-full h-1 bg-gradient-to-r from-transparent via-campo-400 to-transparent shadow-[0_0_15px_#22c55e] animate-[scan_2s_ease-in-out_infinite]" />
-            <div className="absolute inset-0 bg-campo-500/5 mix-blend-overlay animate-pulse" />
+          <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden rounded-2xl">
+            <style>{`
+              @keyframes laser-sweep {
+                0% { top: 0%; opacity: 0.3; }
+                50% { top: 98%; opacity: 1; }
+                100% { top: 0%; opacity: 0.3; }
+              }
+              .animate-laser-sweep {
+                animation: laser-sweep 2.2s infinite ease-in-out;
+              }
+            `}</style>
+            
+            {/* Cuadrícula de laboratorio Sci-Fi */}
+            <div className="absolute inset-0 opacity-15 bg-[linear-gradient(rgba(34,197,94,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(34,197,94,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
+            
+            {/* Visor térmico de pulso */}
+            <div className="absolute inset-0 bg-campo-500/5 animate-pulse mix-blend-overlay" />
+            
+            {/* Línea Láser real con brillo neón de alta tensión */}
+            <div className="absolute left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-campo-400 to-transparent shadow-[0_0_12px_#22c55e,0_0_25px_#10b981] animate-laser-sweep" />
           </div>
         )}
 
