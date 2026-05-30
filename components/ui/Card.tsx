@@ -3,9 +3,11 @@ import { HTMLAttributes } from 'react';
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   severity?: 'BAJA' | 'MEDIA' | 'ALTA' | 'CRITICA' | null;
+  interactive?: boolean;
+  glass?: boolean;
 }
 
-export function Card({ className, severity, children, ...props }: CardProps) {
+export function Card({ className, severity, interactive = true, glass = false, children, ...props }: CardProps) {
   const borderColors = {
     BAJA: 'border-l-campo-500',
     MEDIA: 'border-l-alerta-400',
@@ -16,8 +18,10 @@ export function Card({ className, severity, children, ...props }: CardProps) {
   return (
     <div
       className={cn(
-        'rounded-lg bg-surface shadow-card border border-border/50',
-        severity && 'border-l-[3px]',
+        'rounded-xl transition-all duration-300',
+        glass ? 'glass-panel' : 'bg-surface shadow-card border border-border/50',
+        interactive && 'hover-lift cursor-pointer',
+        severity && 'border-l-[4px]',
         severity && borderColors[severity],
         className
       )}

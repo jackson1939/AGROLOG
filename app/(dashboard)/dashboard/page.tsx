@@ -8,12 +8,13 @@ import { ParcelaMap } from '@/components/parcelas/ParcelaMap';
 import { Button } from '@/components/ui/Button';
 import { fetchClima } from '@/lib/clima';
 import { startOfMonth } from 'date-fns';
+import { InteractiveCharts } from '@/components/dashboard/InteractiveCharts';
 
 async function getDashboardData(userId: string) {
   const now = new Date();
   const monthStart = startOfMonth(now);
 
-  const [parcelas, visitasMes, diagnosticos, informes, recentVisitas] =
+  const [parcelas, visitasMes, diagnosticos, informes, recentVisitas, visitasTrend] =
     await Promise.all([
       prisma.parcela.count({ where: { userId, activa: true } }),
       prisma.visita.count({
@@ -26,6 +27,12 @@ async function getDashboardData(userId: string) {
         include: { parcela: { select: { nombre: true, cultivo: true } } },
         orderBy: { fecha: 'desc' },
         take: 5,
+      }),
+      prisma.visita.findMany({
+        where: { userId },
+        select: { fecha: true, severidad: true },
+        orderBy: { fecha: 'asc' },
+        take: 15,
       }),
     ]);
 
@@ -66,12 +73,26 @@ async function getDashboardData(userId: string) {
     recentVisitas,
     alertas,
     allParcelas,
+    visitasTrend: visitasTrend.map((v) => ({
+      fecha: v.fecha.toISOString(),
+      severidad: v.severidad,
+    })),
   };
 }
 
 export default async function DashboardPage() {
   const session = await auth();
   const data = await getDashboardData(session!.user!.id);
+
+  const cropCounts = data.allParcelas.reduce((acc, p) => {
+    acc[p.cultivo] = (acc[p.cultivo] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const cropData = Object.entries(cropCounts).map(([cultivo, count]) => ({
+    name: cultivo as any,
+    value: count,
+  }));
 
   return (
     <div className="space-y-6">
@@ -88,6 +109,8 @@ export default async function DashboardPage() {
       </div>
 
       <StatsCards stats={data.stats} />
+
+      <InteractiveCharts cropData={cropData} visitasData={data.visitasTrend} />
 
       {data.alertas.length > 0 && (
         <div className="space-y-2">

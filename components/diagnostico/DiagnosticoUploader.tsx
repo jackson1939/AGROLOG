@@ -38,25 +38,28 @@ export function DiagnosticoUploader({ onAnalyze, loading }: DiagnosticoUploaderP
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
         className={cn(
-          'relative rounded-xl border-2 border-dashed p-8 text-center transition-colors',
-          dragOver ? 'border-campo-500 bg-campo-50' : 'border-border hover:border-campo-300'
+          'relative rounded-xl border-2 border-dashed p-8 text-center transition-all duration-300 overflow-hidden',
+          dragOver ? 'border-campo-500 bg-campo-50/50 shadow-inner' : 'border-border bg-surface hover:border-campo-400 hover:shadow-sm',
+          loading && 'pointer-events-none'
         )}
       >
+        {preview && loading && <div className="laser-scan" />}
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt="Preview" className="mx-auto max-h-64 rounded-lg object-contain" />
+          <img src={preview} alt="Preview" className={cn("mx-auto max-h-64 rounded-lg object-contain transition-all duration-500", loading && "blur-[1px]")} />
         ) : (
-          <div className="space-y-2">
-            <p className="text-4xl">🔬</p>
+          <div className="space-y-2 py-4">
+            <p className="text-4xl animate-bounce duration-1000">🔬</p>
             <p className="font-serif text-lg text-text-1">Arrastra una foto de campo</p>
-            <p className="text-sm text-text-3">o usa la cámara</p>
+            <p className="text-sm text-text-3">o haz clic para abrir la cámara</p>
           </div>
         )}
         <input
           type="file"
           accept="image/*"
           capture="environment"
-          className="absolute inset-0 opacity-0 cursor-pointer"
+          disabled={loading}
+          className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
           onChange={(e) => {
             const f = e.target.files?.[0];
             if (f) handleFile(f);
