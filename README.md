@@ -7,10 +7,11 @@
 ## 👥 Equipo y Colaboradores
 * **Nombre del Equipo**: **EnerCruz Tech**
 * **Integrantes**:
-  * **Amira [Apellido]** (Desarrolladora Fullstack & Creadora del Core de Comunidad)
-  * **Carlos Mendoza** (Desarrollador Fitosanitario & Especialista en Modelado de Datos)
-  * **[Nombre Integrante 3]** (Rol / Especialidad)
-  * **[Nombre Integrante 4]** (Rol / Especialidad)
+  * **Amira Raciel Ramos Fuentes** (Desarrolladora Frontend & Diseño UX/UI)
+  * **Victor Hugo Murillo Siles** (Desarrollador Full Stack & Integración de Base de Datos)
+  * **Mijael Mérida Alvarado** (Desarrollador Backend & Modelado de Negocio)
+  * **Dax Kenji Tellez Duran** (Desarrollador General & Integración de APIs)
+  * **Ronald Augusto Rodriguez Serrano** (Pitch & Comunicación Social)
 
 ---
 
