@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { toast } from 'sonner';
+import { Sparkles, BrainCircuit, ShoppingBag, ShieldCheck, Compass } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,37 +39,146 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="rounded-xl bg-surface border border-border shadow-elevated p-8">
-      <div className="text-center mb-8">
-        <h1 className="font-serif text-3xl text-tierra-900">AgroLog</h1>
-        <p className="text-sm text-text-3 mt-1">Tu campo, tu historial, tu decisión.</p>
+    <div className="w-full bg-white/70 rounded-3xl border border-[#bfead0]/60 p-4 md:p-6 backdrop-blur-xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[500px]">
+      
+      {/* ── Left Column: Agrotech Sci-Fi Showcase Panel ── */}
+      <div className="hidden md:flex flex-col justify-between h-full min-h-[460px] rounded-2xl p-8 bg-gradient-to-br from-[#0a2818] to-[#15452a] text-white relative overflow-hidden shadow-inner border border-white/5">
+        
+        {/* Animated matrix dots pattern in the background */}
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(rgba(34,197,94,0.3)_1px,transparent_1px)] bg-[size:16px_16px]" />
+        
+        {/* Decorative organic tech orbs */}
+        <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-[#4ade80]/10 blur-[40px] animate-pulse" />
+        <div className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-amber-500/10 blur-[40px] animate-pulse [animation-delay:1.5s]" />
+
+        {/* Top brand header */}
+        <div className="relative z-10 flex items-center gap-2">
+          <div className="h-8 w-8 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#4ade80] to-[#16a34a] shadow-md shadow-[#16a34a]/30">
+            <span className="text-white text-sm font-bold">🌾</span>
+          </div>
+          <span className="font-serif text-lg font-black tracking-wider text-white">
+            Agro<span className="text-[#4ade80]">Log</span>
+          </span>
+        </div>
+
+        {/* Center: Main value proposition */}
+        <div className="relative z-10 my-auto py-6 space-y-6">
+          <div className="space-y-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#4ade80]/10 border border-[#4ade80]/20 text-[10px] font-mono font-bold tracking-widest text-[#4ade80] uppercase">
+              <Sparkles className="w-3 h-3" /> Ecosistema de 3ra Generación
+            </span>
+            <h2 className="font-serif text-3xl font-black leading-tight text-white">
+              Siembra Datos.<br />
+              Cosecha Futuro.
+            </h2>
+            <p className="text-xs text-[#6ca381] leading-relaxed max-w-sm">
+              Conectamos el relevo generacional del campo con insumos de alta tecnología en Santa Cruz.
+            </p>
+          </div>
+
+          {/* Interactive Feature Pills */}
+          <div className="space-y-2.5 max-w-xs">
+            {[
+              { icon: <BrainCircuit className="w-4 h-4 text-[#4ade80]" />, title: 'Diagnóstico Foliar con IA', desc: 'Análisis visual al instante mediante Gemini.' },
+              { icon: <ShoppingBag className="w-4 h-4 text-amber-400" />, title: 'Marketplace de Adquisición', desc: 'Compra insumos específicos con un solo click.' },
+              { icon: <ShieldCheck className="w-4 h-4 text-[#4ade80]" />, title: 'Mediación Tecnológica', desc: 'El nexo comercial perfecto para el productor.' }
+            ].map((feat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                className="flex items-start gap-3 p-2.5 rounded-xl bg-white/5 border border-white/5 hover:border-[#4ade80]/20 transition-all duration-300 backdrop-blur-sm group"
+              >
+                <div className="p-1.5 rounded-lg bg-white/5 group-hover:scale-110 transition-transform duration-300">
+                  {feat.icon}
+                </div>
+                <div>
+                  <h4 className="text-[11px] font-bold text-white leading-none mb-1">{feat.title}</h4>
+                  <p className="text-[9px] text-[#6ca381] leading-tight">{feat.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom footer note */}
+        <div className="relative z-10 flex items-center gap-1.5 text-[9px] font-mono text-[#6ca381]">
+          <Compass className="w-3 h-3 text-[#4ade80]" />
+          <span>Bolivia AgroTech Network · 2026</span>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          id="email"
-          name="email"
-          label="Email"
-          type="email"
-          defaultValue="demo@agrolog.bo"
-          required
-        />
-        <Input
-          id="password"
-          name="password"
-          label="Contraseña"
-          type="password"
-          defaultValue="campo2024"
-          required
-        />
-        <Button type="submit" className="w-full" loading={loading}>
-          Entrar
-        </Button>
-      </form>
+      {/* ── Right Column: The Premium Login Form ── */}
+      <div className="p-4 md:p-6 flex flex-col justify-center h-full relative z-10">
+        
+        {/* Mobile Header (Only visible on mobile) */}
+        <div className="flex md:hidden items-center justify-center gap-2 mb-8">
+          <div className="h-9 w-9 flex items-center justify-center rounded-xl bg-gradient-to-br from-[#16a34a] to-[#052e16] shadow-lg">
+            <span className="text-white text-base font-bold">🌾</span>
+          </div>
+          <span className="font-serif text-2xl font-black text-[#0a2818]">
+            Agro<span className="text-[#16a34a]">Log</span>
+          </span>
+        </div>
 
-      <p className="text-xs text-text-3 text-center mt-6 font-mono">
-        demo@agrolog.bo · campo2024
-      </p>
+        {/* Form Title */}
+        <div className="mb-6 text-center md:text-left">
+          <h1 className="font-serif text-2xl md:text-3xl font-black text-[#0a2818]">
+            Iniciar Sesión
+          </h1>
+          <p className="text-xs text-[#35734f] mt-1 font-medium">
+            Entra a tu portal de campo y marketplace digital.
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="group transition-all duration-300">
+            <Input
+              id="email"
+              name="email"
+              label="Email de Usuario"
+              type="email"
+              defaultValue="demo@agrolog.bo"
+              required
+              className="bg-white/60 focus:bg-white border-[#bfead0] focus:ring-[#16a34a]/30 focus:border-[#16a34a] rounded-xl text-sm"
+            />
+          </div>
+          
+          <div className="group transition-all duration-300">
+            <Input
+              id="password"
+              name="password"
+              label="Contraseña"
+              type="password"
+              defaultValue="campo2024"
+              required
+              className="bg-white/60 focus:bg-white border-[#bfead0] focus:ring-[#16a34a]/30 focus:border-[#16a34a] rounded-xl text-sm"
+            />
+          </div>
+
+          <Button 
+            type="submit" 
+            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white font-bold text-sm shadow-md shadow-[#16a34a]/10 hover:shadow-lg hover:shadow-[#16a34a]/20 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 mt-2" 
+            loading={loading}
+          >
+            Ingresar al Campo
+          </Button>
+        </form>
+
+        {/* Credentials Sandbox Helper */}
+        <div className="mt-8 p-3 rounded-xl bg-[#edf7f1]/80 border border-[#bfead0]/50 text-center relative overflow-hidden">
+          <div className="absolute right-2 top-2 opacity-5 select-none text-2xl">🔐</div>
+          <p className="text-[10px] font-mono text-[#35734f] font-bold">
+            Credenciales de Demostración:
+          </p>
+          <code className="text-[10px] font-mono text-[#15452a] block mt-1 bg-white/50 px-2 py-0.5 rounded inline-block">
+            demo@agrolog.bo <span className="opacity-40">/</span> campo2024
+          </code>
+        </div>
+      </div>
+
     </div>
   );
 }
