@@ -36,7 +36,7 @@ export async function analyzeImage(
     return getMockDiagnostico(cultivo);
   }
 
-  const model = genai.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genai.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
 
   const result = await model.generateContent([
     { inlineData: { data: base64, mimeType } },

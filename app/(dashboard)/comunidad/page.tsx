@@ -135,7 +135,9 @@ export default function ComunidadPage() {
         setPosts(posts.map(p => p.id === id ? updatedPost : p));
         toast.success('Análisis completado. ¡Veredicto e informe técnico creados!', { id: 'analyze' });
       } else {
-        toast.error('Error al analizar la publicación', { id: 'analyze' });
+        const errData = await res.json().catch(() => ({}));
+        const errMsg = errData.error || 'Error al analizar la publicación';
+        toast.error(errMsg, { id: 'analyze', duration: 6000 });
       }
     } catch (err) {
       toast.error('Error de red', { id: 'analyze' });
@@ -377,26 +379,26 @@ export default function ComunidadPage() {
                     </p>
                   </div>
                 </div>
-                {post.estado === 'ANALIZADO' ? (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20">
-                    <CheckCircle2 className="w-3 h-3" /> Propuesta Emitida
-                  </span>
-                ) : (
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
+                  {post.estado === 'ANALIZADO' ? (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20">
+                      <CheckCircle2 className="w-3 h-3" /> Propuesta Emitida
+                    </span>
+                  ) : (
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-bold uppercase tracking-wider border border-amber-500/20">
                       <Activity className="w-3 h-3" /> Pendiente IA
                     </span>
-                    {(isAdmin || post.userId === session?.user?.id) && (
-                      <button
-                        onClick={() => handleDelete(post.id)}
-                        className="text-red-400/60 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
-                        title="Eliminar publicación"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                )}
+                  )}
+                  {isAdmin && (
+                    <button
+                      onClick={() => handleDelete(post.id)}
+                      className="text-red-400/60 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
+                      title="Eliminar publicación"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* Message text & picture attachment */}
@@ -452,7 +454,7 @@ export default function ComunidadPage() {
                 </div>
               )}
 
-              {isAdmin && post.estado === 'PENDIENTE' && (
+              {isAdmin && (
                 <div className="mt-4 pt-4 border-t border-white/5 flex justify-end">
                   <Button 
                     onClick={() => handleAnalyze(post.id)}
@@ -460,7 +462,11 @@ export default function ComunidadPage() {
                     className="bg-white/5 hover:bg-[#4ade80]/10 text-[#4ade80] border border-[#4ade80]/20 transition-all text-xs h-8"
                   >
                     <BrainCircuit className="w-4 h-4 mr-2" />
-                    {analyzingId === post.id ? 'Analizando...' : 'Aplicar IA y Recomendar'}
+                    {analyzingId === post.id 
+                      ? 'Analizando...' 
+                      : post.estado === 'ANALIZADO' 
+                        ? 'Volver a Analizar con IA' 
+                        : 'Aplicar IA y Recomendar'}
                   </Button>
                 </div>
               )}

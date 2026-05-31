@@ -9,8 +9,10 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const isAdmin = session.user.role === 'ADMIN';
+
   const visitas = await prisma.visita.findMany({
-    where: { userId: session.user.id },
+    where: isAdmin ? {} : { userId: session.user.id },
     include: {
       parcela: { select: { nombre: true, cultivo: true } },
       diagnostico: true,

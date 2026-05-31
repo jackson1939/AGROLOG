@@ -22,12 +22,11 @@ export async function DELETE(
       return NextResponse.json({ error: 'Publicación no encontrada' }, { status: 404 });
     }
 
-    // Allow deletion only if the user is an ADMIN or if the post belongs to the logged-in user
+    // Allow deletion strictly for ADMIN role only
     const isAdmin = session.user.role === 'ADMIN';
-    const isOwner = post.userId === session.user.id;
 
-    if (!isAdmin && !isOwner) {
-      return NextResponse.json({ error: 'Forbidden. No tienes permisos para eliminar este reporte.' }, { status: 403 });
+    if (!isAdmin) {
+      return NextResponse.json({ error: 'Forbidden. Solo el administrador central puede eliminar reportes.' }, { status: 403 });
     }
 
     await prisma.difusionPost.delete({
