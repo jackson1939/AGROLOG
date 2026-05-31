@@ -39,10 +39,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full bg-white/70 rounded-3xl border border-[#bfead0]/60 p-4 md:p-6 backdrop-blur-xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[500px]">
+    <div className="w-full bg-black/40 rounded-3xl border border-white/10 p-4 md:p-6 backdrop-blur-xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[500px]">
       
       {/* ── Left Column: Agrotech Sci-Fi Showcase Panel ── */}
-      <div className="hidden md:flex flex-col justify-between h-full min-h-[460px] rounded-2xl p-8 bg-gradient-to-br from-[#0a2818] to-[#15452a] text-white relative overflow-hidden shadow-inner border border-white/5">
+      <div className="hidden md:flex flex-col justify-between h-full min-h-[460px] rounded-2xl p-8 bg-gradient-to-br from-[#0a2818]/60 to-[#15452a]/60 text-white relative overflow-hidden shadow-inner border border-white/10 backdrop-blur-md">
         
         {/* Animated matrix dots pattern in the background */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(rgba(34,197,94,0.3)_1px,transparent_1px)] bg-[size:16px_16px]" />
@@ -117,24 +117,24 @@ export default function LoginPage() {
           <div className="h-9 w-9 flex items-center justify-center rounded-xl bg-gradient-to-br from-[#16a34a] to-[#052e16] shadow-lg">
             <span className="text-white text-base font-bold">🌾</span>
           </div>
-          <span className="font-serif text-2xl font-black text-[#0a2818]">
-            Agro<span className="text-[#16a34a]">Log</span>
+          <span className="font-serif text-2xl font-black text-white">
+            Agro<span className="text-[#4ade80]">Log</span>
           </span>
         </div>
 
         {/* Form Title */}
         <div className="mb-6 text-center md:text-left">
-          <h1 className="font-serif text-2xl md:text-3xl font-black text-[#0a2818]">
+          <h1 className="font-serif text-2xl md:text-3xl font-black text-white">
             Iniciar Sesión
           </h1>
-          <p className="text-xs text-[#35734f] mt-1 font-medium">
+          <p className="text-xs text-[#4ade80]/80 mt-1 font-medium">
             Entra a tu portal de campo y marketplace digital.
           </p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="group transition-all duration-300">
+          <div className="group transition-all duration-300 [&_label]:text-[#4ade80]/80 [&_label]:text-xs [&_label]:font-mono [&_label]:uppercase [&_label]:tracking-wider [&_label]:mb-1.5">
             <Input
               id="email"
               name="email"
@@ -142,11 +142,11 @@ export default function LoginPage() {
               type="email"
               defaultValue="demo@agrolog.bo"
               required
-              className="bg-white/60 focus:bg-white border-[#bfead0] focus:ring-[#16a34a]/30 focus:border-[#16a34a] rounded-xl text-sm"
+              className="bg-black/30 hover:bg-black/40 focus:bg-black/50 border-white/10 text-white placeholder-white/20 focus:ring-[#4ade80]/30 focus:border-[#4ade80] rounded-xl text-sm"
             />
           </div>
           
-          <div className="group transition-all duration-300">
+          <div className="group transition-all duration-300 [&_label]:text-[#4ade80]/80 [&_label]:text-xs [&_label]:font-mono [&_label]:uppercase [&_label]:tracking-wider [&_label]:mb-1.5">
             <Input
               id="password"
               name="password"
@@ -154,7 +154,7 @@ export default function LoginPage() {
               type="password"
               defaultValue="campo2024"
               required
-              className="bg-white/60 focus:bg-white border-[#bfead0] focus:ring-[#16a34a]/30 focus:border-[#16a34a] rounded-xl text-sm"
+              className="bg-black/30 hover:bg-black/40 focus:bg-black/50 border-white/10 text-white placeholder-white/20 focus:ring-[#4ade80]/30 focus:border-[#4ade80] rounded-xl text-sm"
             />
           </div>
 
@@ -168,12 +168,12 @@ export default function LoginPage() {
         </form>
 
         {/* Credentials Sandbox Helper */}
-        <div className="mt-8 p-3 rounded-xl bg-[#edf7f1]/80 border border-[#bfead0]/50 text-center relative overflow-hidden">
-          <div className="absolute right-2 top-2 opacity-5 select-none text-2xl">🔐</div>
-          <p className="text-[10px] font-mono text-[#35734f] font-bold">
+        <div className="mt-8 p-4 rounded-xl bg-white/5 border border-white/10 text-center relative overflow-hidden backdrop-blur-md">
+          <div className="absolute right-2 top-2 opacity-10 select-none text-2xl">🔐</div>
+          <p className="text-[10px] font-mono text-[#4ade80] font-bold">
             Credenciales de Demostración:
           </p>
-          <code className="text-[10px] font-mono text-[#15452a] block mt-1 bg-white/50 px-2 py-0.5 rounded inline-block">
+          <code className="text-[10px] font-mono text-emerald-300 block mt-1.5 bg-white/5 border border-white/5 px-2.5 py-1 rounded inline-block">
             demo@agrolog.bo <span className="opacity-40">/</span> campo2024
           </code>
         </div>

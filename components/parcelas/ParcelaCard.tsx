@@ -24,7 +24,7 @@ export function ParcelaCard({ parcela }: ParcelaCardProps) {
           </div>
           <div className="mt-3 flex items-center gap-4 text-xs font-mono text-text-2">
             <span>{parcela.superficie} ha</span>
-            <span>{parcela.productor}</span>
+            <span className="text-[#4ade80]">👨‍🌾 {parcela.productor}</span>
             {parcela._count && <span>{parcela._count.visitas} visitas</span>}
           </div>
           {!parcela.activa && (

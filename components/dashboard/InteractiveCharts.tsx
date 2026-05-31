@@ -13,7 +13,7 @@ import {
   Cell,
   Legend,
 } from 'recharts';
-import { Card, CardContent, CardTitle } from '@/components/ui/Card';
+import { TrendingUp, Layers } from 'lucide-react';
 import { CULTIVO_LABELS } from '@/lib/utils';
 import type { Cultivo, Severidad } from '@/types';
 
@@ -23,16 +23,16 @@ interface InteractiveChartsProps {
 }
 
 const CULTIVO_COLORS: Record<string, string> = {
-  SOYA: '#3d8b3d',      // Campo verde
-  MAIZ: '#eab308',      // Amarillo dorado
-  QUINUA: '#a855f7',    // Púrpura
-  PAPA: '#854d0e',      // Marrón papa
-  TRIGO: '#f97316',     // Naranja trigo
-  GIRASOL: '#fbbf24',   // Amarillo girasol
-  CITRICOS: '#22c55e',  // Verde lima
-  TOMATE: '#ef4444',    // Rojo tomate
-  CEBOLLA: '#ec4899',   // Rosa
-  OTRO: '#6b7280',      // Gris
+  SOYA: '#4ade80',
+  MAIZ: '#fbbf24',
+  QUINUA: '#c084fc',
+  PAPA: '#f97316',
+  TRIGO: '#f59e0b',
+  GIRASOL: '#facc15',
+  CITRICOS: '#34d399',
+  TOMATE: '#f87171',
+  CEBOLLA: '#fb7185',
+  OTRO: '#64748b',
 };
 
 const SEVERIDAD_VALORES: Record<Severidad, number> = {
@@ -40,6 +40,12 @@ const SEVERIDAD_VALORES: Record<Severidad, number> = {
   MEDIA: 2,
   ALTA: 3,
   CRITICA: 4,
+};
+
+const glassPanelStyle = {
+  background: 'rgba(255,255,255,0.03)',
+  border: '1px solid rgba(74, 222, 128, 0.1)',
+  boxShadow: '0 0 40px rgba(74, 222, 128, 0.04), inset 0 1px 0 rgba(255,255,255,0.04)',
 };
 
 export function InteractiveCharts({ cropData, visitasData }: InteractiveChartsProps) {
@@ -52,17 +58,19 @@ export function InteractiveCharts({ cropData, visitasData }: InteractiveChartsPr
   if (!mounted) {
     return (
       <div className="grid lg:grid-cols-5 gap-6">
-        <Card className="lg:col-span-3 h-[320px] flex items-center justify-center">
-          <span className="text-text-3 animate-pulse text-sm">Cargando gráficos...</span>
-        </Card>
-        <Card className="lg:col-span-2 h-[320px] flex items-center justify-center">
-          <span className="text-text-3 animate-pulse text-sm">Cargando distribución...</span>
-        </Card>
+        {[3, 2].map((span, i) => (
+          <div
+            key={i}
+            className={`lg:col-span-${span} h-[320px] rounded-2xl flex items-center justify-center`}
+            style={glassPanelStyle}
+          >
+            <span className="text-emerald-500/40 animate-pulse text-sm font-mono">cargando · tapera...</span>
+          </div>
+        ))}
       </div>
     );
   }
 
-  // Procesar tendencia de severidad
   const trendData = visitasData.map((v) => {
     const d = new Date(v.fecha);
     return {
@@ -78,20 +86,28 @@ export function InteractiveCharts({ cropData, visitasData }: InteractiveChartsPr
     value: c.value,
   }));
 
+  // Chiquitano severity labels: bésiro language approximate translations
   const customTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
-      const severityLabels = {
-        1: 'Baja 🟢',
-        2: 'Media 🟡',
-        3: 'Alta 🟠',
-        4: 'Crítica 🔴',
+      const severityLabels: Record<number, string> = {
+        1: 'Baja · Nopino 🟢',
+        2: 'Media · Nopemo 🟡',
+        3: 'Alta · Noxemo 🟠',
+        4: 'Crítica · Noxikimo 🔴',
       };
       return (
-        <div className="rounded-lg bg-tierra-900 text-white p-3 text-xs shadow-elevated border border-tierra-800">
-          <p className="font-semibold">{data.fechaFormateada}</p>
-          <p className="mt-1 font-mono text-campo-300">
-            Nivel: {severityLabels[data.severidadValor as keyof typeof severityLabels]}
+        <div
+          className="rounded-xl p-3 text-xs shadow-2xl"
+          style={{
+            background: 'rgba(5,13,7,0.95)',
+            border: '1px solid rgba(74,222,128,0.2)',
+            backdropFilter: 'blur(20px)',
+          }}
+        >
+          <p className="font-bold text-white mb-1">{data.fechaFormateada}</p>
+          <p className="font-mono text-emerald-400">
+            {severityLabels[data.severidadValor as keyof typeof severityLabels]}
           </p>
         </div>
       );
@@ -101,31 +117,47 @@ export function InteractiveCharts({ cropData, visitasData }: InteractiveChartsPr
 
   return (
     <div className="grid lg:grid-cols-5 gap-6" data-gsap="stagger">
-      {/* Gráfico de Tendencia */}
-      <Card interactive={false} className="lg:col-span-3 h-[320px] flex flex-col p-4">
-        <CardTitle className="text-base mb-1 font-semibold flex items-center gap-2">
-          <span>📈</span> Tendencia de Severidad en Visitas
-        </CardTitle>
-        <p className="text-xs text-text-3 mb-4">Nivel de alerta promedio registrado cronológicamente</p>
+      {/* Severity Trend Chart */}
+      <div
+        className="lg:col-span-3 h-[320px] flex flex-col p-5 rounded-2xl relative overflow-hidden"
+        style={glassPanelStyle}
+      >
+        {/* Ambient decoration */}
+        <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-emerald-500/5 blur-[60px] pointer-events-none" />
+
+        <div className="flex items-center gap-2.5 mb-1">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+            <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-white leading-tight">Tendencia Fitosanitaria</h3>
+            <p className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-widest">
+              Nixemo · Nivel de Severidad · SCZ
+            </p>
+          </div>
+        </div>
+        <p className="text-[11px] text-slate-400 mb-4">Evolución cronológica de alertas en lotes de clientes</p>
+
         <div className="flex-1 min-h-0 w-full">
           {trendData.length === 0 ? (
-            <div className="h-full flex items-center justify-center text-xs text-text-3">
-              Registra visitas para ver la tendencia fitosanitaria
+            <div className="h-full flex flex-col items-center justify-center gap-2">
+              <TrendingUp className="w-8 h-8 text-emerald-500/20" />
+              <span className="text-xs text-slate-500 font-mono">Registra visitas para ver la tendencia</span>
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={trendData} margin={{ top: 5, right: 10, left: -25, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="colorSeverity" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#b8975a" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#b8975a" stopOpacity={0} />
+                  <linearGradient id="colorSeverityDark" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#4ade80" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#4ade80" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <XAxis
                   dataKey="fechaFormateada"
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fontSize: 10, fill: 'var(--color-text-3)', fontFamily: 'var(--font-mono)' }}
+                  tick={{ fontSize: 9, fill: '#4b5563', fontFamily: 'var(--font-mono)' }}
                 />
                 <YAxis
                   domain={[1, 4]}
@@ -139,49 +171,69 @@ export function InteractiveCharts({ cropData, visitasData }: InteractiveChartsPr
                   }}
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fontSize: 10, fill: 'var(--color-text-3)', fontFamily: 'var(--font-mono)' }}
+                  tick={{ fontSize: 9, fill: '#4b5563', fontFamily: 'var(--font-mono)' }}
                 />
                 <Tooltip content={customTooltip} />
                 <Area
                   type="monotone"
                   dataKey="severidadValor"
-                  stroke="#b8975a"
+                  stroke="#4ade80"
                   strokeWidth={2}
                   fillOpacity={1}
-                  fill="url(#colorSeverity)"
+                  fill="url(#colorSeverityDark)"
+                  dot={{ fill: '#4ade80', r: 3, strokeWidth: 0 }}
+                  activeDot={{ fill: '#4ade80', r: 5, strokeWidth: 0, filter: 'drop-shadow(0 0 6px #4ade80)' }}
                 />
               </AreaChart>
             </ResponsiveContainer>
           )}
         </div>
-      </Card>
+      </div>
 
-      {/* Gráfico de Torta */}
-      <Card interactive={false} className="lg:col-span-2 h-[320px] flex flex-col p-4">
-        <CardTitle className="text-base mb-1 font-semibold flex items-center gap-2">
-          <span>⬡</span> Cultivos Registrados
-        </CardTitle>
-        <p className="text-xs text-text-3 mb-4">Proporción de parcelas activas por tipo de cultivo</p>
+      {/* Crop Distribution Pie */}
+      <div
+        className="lg:col-span-2 h-[320px] flex flex-col p-5 rounded-2xl relative overflow-hidden"
+        style={glassPanelStyle}
+      >
+        <div className="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-emerald-500/5 blur-[60px] pointer-events-none" />
+
+        <div className="flex items-center gap-2.5 mb-1">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+            <Layers className="w-3.5 h-3.5 text-emerald-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-white leading-tight">Cultivos en SCZ</h3>
+            <p className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-widest">
+              Tapera · Distribución activa
+            </p>
+          </div>
+        </div>
+        <p className="text-[11px] text-slate-400 mb-2">Proporción por tipo de cultivo en parcelas administradas</p>
+
         <div className="flex-1 min-h-0 w-full flex items-center justify-center">
           {formattedCropData.length === 0 ? (
-            <div className="text-xs text-text-3">Crea parcelas para ver estadísticas</div>
+            <div className="flex flex-col items-center gap-2">
+              <Layers className="w-8 h-8 text-emerald-500/20" />
+              <span className="text-xs text-slate-500 font-mono">Crea lotes para ver estadísticas</span>
+            </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={formattedCropData}
                   cx="50%"
-                  cy="45%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={3}
+                  cy="43%"
+                  innerRadius={55}
+                  outerRadius={78}
+                  paddingAngle={4}
                   dataKey="value"
                 >
                   {formattedCropData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={CULTIVO_COLORS[entry.rawName] || '#6b7280'}
-                      className="transition-opacity duration-300 hover:opacity-80 outline-none"
+                      fill={CULTIVO_COLORS[entry.rawName] || '#64748b'}
+                      opacity={0.85}
+                      className="transition-opacity duration-300 hover:opacity-100 outline-none"
                     />
                   ))}
                 </Pie>
@@ -191,11 +243,12 @@ export function InteractiveCharts({ cropData, visitasData }: InteractiveChartsPr
                     name,
                   ]}
                   contentStyle={{
-                    borderRadius: '8px',
-                    background: 'var(--color-tierra-900)',
-                    border: '1px solid var(--color-tierra-800)',
+                    borderRadius: '12px',
+                    background: 'rgba(5,13,7,0.95)',
+                    border: '1px solid rgba(74,222,128,0.2)',
                     color: 'white',
                     fontSize: '11px',
+                    backdropFilter: 'blur(20px)',
                   }}
                 />
                 <Legend
@@ -203,13 +256,13 @@ export function InteractiveCharts({ cropData, visitasData }: InteractiveChartsPr
                   height={40}
                   iconSize={8}
                   iconType="circle"
-                  wrapperStyle={{ fontSize: '11px', color: 'var(--color-text-2)' }}
+                  wrapperStyle={{ fontSize: '10px', color: '#94a3b8' }}
                 />
               </PieChart>
             </ResponsiveContainer>
           )}
         </div>
-      </Card>
+      </div>
     </div>
   );
 }

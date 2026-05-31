@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { href: '/dashboard', label: 'Inicio', icon: '◫' },
-  { href: '/campo', label: 'Campo', icon: '◎' },
-  { href: '/campo/nueva', label: 'Nueva', icon: '+', highlight: true },
-  { href: '/parcelas', label: 'Parcelas', icon: '⬡' },
-  { href: '/diagnostico', label: 'Diag.', icon: '◉' },
+  { href: '/dashboard',    label: 'Inicio',      icon: '◫' },
+  { href: '/parcelas',     label: 'Lotes Clientes', icon: '⬡' },
+  { href: '/marketplace',  label: 'Mercado',     icon: '🛒', highlight: true },
+  { href: '/diagnostico',  label: 'Diag. IA',    icon: '◉' },
+  { href: '/informes',     label: 'Informes',    icon: '▤' },
 ];
 
 export function MobileNav() {

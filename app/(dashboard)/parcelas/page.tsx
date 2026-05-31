@@ -18,11 +18,11 @@ export default async function ParcelasPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between" data-gsap="stagger">
         <div>
-          <h1 className="font-serif text-2xl text-text-1">Parcelas</h1>
-          <p className="text-text-3 text-sm">{parcelas.length} registradas</p>
+          <h1 className="font-serif text-2xl text-text-1">Lotes de Productores</h1>
+          <p className="text-text-3 text-sm">Gestión fitosanitaria de parcelas activas en Santa Cruz · {parcelas.length} registradas</p>
         </div>
         <Link href="/parcelas/nueva">
-          <Button>Nueva parcela</Button>
+          <Button>Nuevo lote</Button>
         </Link>
       </div>
 
