@@ -139,7 +139,7 @@ export default function LandingPage() {
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" /> GDG Hackathon 2026
           </span>
           <Link href="/login">
-            <Button variant="outline" size="sm" className="font-medium text-slate-200 border-white/10 hover:bg-white/5 hover:text-white transition-all rounded-xl">
+            <Button variant="ghost" size="sm" className="font-medium text-slate-200 border-white/10 hover:bg-white/5 hover:text-white transition-all rounded-xl">
               Iniciar sesión
             </Button>
           </Link>
