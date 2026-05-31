@@ -170,7 +170,7 @@ export function EnfermedadBadge({
       ]
         .filter(Boolean)
         .join(' ')}
-      title={config.description}
+
       aria-label={`${config.description}: ${displayLabel}`}
     >
       {/* Pulse status dot */}
