@@ -9,8 +9,8 @@ export function InteractiveAgroBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const ctx = canvas.getContext("2d")!;
+// ctx is guaranteed non‑null after the assertion
 
     let animationFrameId: number;
     let width = (canvas.width = window.innerWidth);

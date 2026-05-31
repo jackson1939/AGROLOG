@@ -23,14 +23,15 @@ export async function generateReportBuffer(input: GenerateReportInput): Promise<
     periodo: input.periodo,
     agronomo: input.agronomo,
     organizacion: input.organizacion,
-    visitas: input.visitas.map((v) => ({
-      fecha: formatDate(v.fecha),
-      parcela: v.parcela.nombre,
-      fenologia: v.fenologia,
-      severidad: v.severidad,
-      observaciones: v.observaciones,
-      fotosUrls: v.fotosUrls,
-    })),
+    visitas: input.visitas.map((v, i) => ({
+    id: `${i}`,
+    fecha: formatDate(v.fecha),
+    parcela: v.parcela.nombre,
+    fenologia: v.fenologia,
+    severidad: v.severidad,
+    observaciones: v.observaciones,
+    fotosUrls: v.fotosUrls,
+  })),
   });
 
   const buffer = await renderToBuffer(doc);
