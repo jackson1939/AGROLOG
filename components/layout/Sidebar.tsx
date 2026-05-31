@@ -4,24 +4,20 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { LayoutDashboard, MapPin, ScanLine, ShoppingBag, FileText } from 'lucide-react';
-
-// ─── Flujo exacto del modelo de negocio AgroLog ───
-// 1. Dashboard → resumen de campo
-// 2. Mis Lotes  → gestión de parcelas activas
-// 3. Diagnóstico IA → foto foliar + Gemini Vision
-// 4. Marketplace → adquisición directa de insumos (monetización 3.5%)
-// 5. Informes → reportes PDF para cooperativas y exportación
-
-const navItems = [
-  { href: '/dashboard', label: 'Resumen', icon: LayoutDashboard, badge: null },
-  { href: '/parcelas', label: 'Lotes de Clientes', icon: MapPin, badge: null },
-  { href: '/diagnostico', label: 'Diagnóstico IA', icon: ScanLine, badge: 'GEMINI' },
-  { href: '/marketplace', label: 'Marketplace', icon: ShoppingBag, badge: '3.5%', highlight: true },
-  { href: '/informes', label: 'Informes PDF', icon: FileText, badge: null },
-];
+import { useLanguage } from '@/lib/language';
+import { LanguageSelector } from './LanguageSelector';
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { href: '/dashboard', label: t('summary', 'sidebar'), icon: LayoutDashboard, badge: null },
+    { href: '/parcelas', label: t('lotes', 'sidebar'), icon: MapPin, badge: null },
+    { href: '/diagnostico', label: t('diagnostico', 'sidebar'), icon: ScanLine, badge: 'GEMINI' },
+    { href: '/marketplace', label: t('marketplace', 'sidebar'), icon: ShoppingBag, badge: '3.5%', highlight: true },
+    { href: '/informes', label: t('informes', 'sidebar'), icon: FileText, badge: null },
+  ];
 
   return (
     <aside className="hidden lg:flex lg:w-64 lg:flex-col bg-gradient-to-b from-[#0d1a0f] to-[#060d07] text-tierra-100 min-h-screen border-r border-white/5 shadow-2xl">
@@ -44,7 +40,9 @@ export function Sidebar() {
 
       {/* ─── Flujo del modelo de negocio ─── */}
       <div className="px-3 pt-4 pb-1">
-        <p className="text-[9px] font-mono text-emerald-500/40 tracking-widest uppercase px-2 mb-2">Flujo de trabajo</p>
+        <p className="text-[9px] font-mono text-emerald-500/40 tracking-widest uppercase px-2 mb-2">
+          {t('flow', 'sidebar')}
+        </p>
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
@@ -99,12 +97,17 @@ export function Sidebar() {
         })}
       </nav>
 
+      {/* Language Selector dynamic unit */}
+      <div className="px-3 mb-2">
+        <LanguageSelector />
+      </div>
+
       {/* Commission indicator at bottom */}
       <div className="p-4 border-t border-white/5">
         <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-xl p-3">
-          <p className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-widest">Modelo de ingreso</p>
-          <p className="text-xs text-emerald-300 font-bold font-mono mt-0.5">3.5% por transacción</p>
-          <p className="text-[9px] text-slate-500 mt-0.5">Mediación de insumos · SCZ</p>
+          <p className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-widest">{t('model', 'sidebar')}</p>
+          <p className="text-xs text-emerald-300 font-bold font-mono mt-0.5">{t('commission', 'sidebar')}</p>
+          <p className="text-[9px] text-slate-500 mt-0.5">{t('mediation', 'sidebar')}</p>
         </div>
       </div>
     </aside>

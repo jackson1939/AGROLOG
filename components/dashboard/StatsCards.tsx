@@ -3,57 +3,58 @@
 import { CountUp } from '@/components/animations/CountUp';
 import { MapPin, Activity, Scan, FileCheck } from 'lucide-react';
 import type { DashboardStats } from '@/types';
+import { useLanguage } from '@/lib/language';
 
 interface StatsCardsProps {
   stats: DashboardStats;
 }
 
-// Chiquitano language (Chiquitano/Bésiro — lengua indígena oficial de Santa Cruz)
-// "Taperaimi" = campo/naturaleza | "maneechimi" = trabajo | "taxkijimi" = ver/mirar
-const statItems = [
-  {
-    key: 'totalParcelas' as const,
-    label: 'Lotes Administrados',
-    sublabel: 'Nopeyapaite · SCZ', // "Bajo mi cuidado" en Chiquitano
-    icon: MapPin,
-    color: '#4ade80',
-    glow: 'rgba(74, 222, 128, 0.15)',
-    border: 'rgba(74, 222, 128, 0.2)',
-    unit: 'lotes',
-  },
-  {
-    key: 'visitasMes' as const,
-    label: 'Visitas este Mes',
-    sublabel: 'Nopeyatime · Mayo', // "Mis visitas" 
-    icon: Activity,
-    color: '#60a5fa',
-    glow: 'rgba(96, 165, 250, 0.12)',
-    border: 'rgba(96, 165, 250, 0.18)',
-    unit: 'visitas',
-  },
-  {
-    key: 'diagnosticos' as const,
-    label: 'Diagnósticos IA',
-    sublabel: 'Gemini Vision · SCZ',
-    icon: Scan,
-    color: '#f59e0b',
-    glow: 'rgba(245, 158, 11, 0.12)',
-    border: 'rgba(245, 158, 11, 0.18)',
-    unit: 'análisis',
-  },
-  {
-    key: 'informes' as const,
-    label: 'Informes PDF',
-    sublabel: 'Reportes generados',
-    icon: FileCheck,
-    color: '#a78bfa',
-    glow: 'rgba(167, 139, 250, 0.12)',
-    border: 'rgba(167, 139, 250, 0.18)',
-    unit: 'informes',
-  },
-];
-
 export function StatsCards({ stats }: StatsCardsProps) {
+  const { t } = useLanguage();
+
+  const statItems = [
+    {
+      key: 'totalParcelas' as const,
+      label: t('totalLotes', 'dashboard'),
+      sublabel: t('underCare', 'dashboard'),
+      icon: MapPin,
+      color: '#4ade80',
+      glow: 'rgba(74, 222, 128, 0.15)',
+      border: 'rgba(74, 222, 128, 0.2)',
+      unit: 'lotes',
+    },
+    {
+      key: 'visitasMes' as const,
+      label: t('recentVisits', 'dashboard'),
+      sublabel: t('totalVisits', 'dashboard'),
+      icon: Activity,
+      color: '#60a5fa',
+      glow: 'rgba(96, 165, 250, 0.12)',
+      border: 'rgba(96, 165, 250, 0.18)',
+      unit: 'visitas',
+    },
+    {
+      key: 'diagnosticos' as const,
+      label: t('diagnosticos', 'dashboard'),
+      sublabel: t('iaDetections', 'dashboard'),
+      icon: Scan,
+      color: '#f59e0b',
+      glow: 'rgba(245, 158, 11, 0.12)',
+      border: 'rgba(245, 158, 11, 0.18)',
+      unit: 'análisis',
+    },
+    {
+      key: 'informes' as const,
+      label: t('informes', 'sidebar'),
+      sublabel: 'PDF Cooperativas',
+      icon: FileCheck,
+      color: '#a78bfa',
+      glow: 'rgba(167, 139, 250, 0.12)',
+      border: 'rgba(167, 139, 250, 0.18)',
+      unit: 'informes',
+    },
+  ];
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" data-gsap="stagger">
       {statItems.map((item) => {
@@ -104,3 +105,4 @@ export function StatsCards({ stats }: StatsCardsProps) {
     </div>
   );
 }
+
