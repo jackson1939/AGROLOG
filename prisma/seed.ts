@@ -18,6 +18,19 @@ async function main() {
     },
   });
 
+  const adminPassword = await bcrypt.hash('admin2024', 10);
+  await prisma.user.upsert({
+    where: { email: 'admin@agrolog.bo' },
+    update: {},
+    create: {
+      email: 'admin@agrolog.bo',
+      name: 'Administrador Central',
+      password: adminPassword,
+      role: 'ADMIN',
+      organizacion: 'AgroLog Central',
+    },
+  });
+
   const parcelas = await Promise.all([
     // Norte Integrado - Soya (zona de mayor producción soyera de Bolivia)
     prisma.parcela.upsert({

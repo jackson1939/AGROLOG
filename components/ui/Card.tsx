@@ -19,7 +19,7 @@ export function Card({ className, severity, interactive = true, glass = false, c
     <div
       className={cn(
         'rounded-xl transition-all duration-300',
-        glass ? 'glass-panel' : 'bg-surface shadow-card border border-border/50',
+        glass ? 'glass-panel' : 'bg-[#081109]/40 backdrop-blur-md border border-white/5 shadow-card hover:border-emerald-500/20',
         interactive && 'hover-lift cursor-pointer',
         severity && 'border-l-[4px]',
         severity && borderColors[severity],
@@ -29,6 +29,7 @@ export function Card({ className, severity, interactive = true, glass = false, c
     >
       {children}
     </div>
+
   );
 }
 

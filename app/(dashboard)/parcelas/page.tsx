@@ -8,22 +8,31 @@ import { Button } from '@/components/ui/Button';
 
 export default async function ParcelasPage() {
   const session = await auth();
+  const isAdmin = session?.user?.role === 'ADMIN';
+
   const parcelas = await prisma.parcela.findMany({
-    where: { userId: session!.user!.id },
+    where: isAdmin ? {} : { userId: session!.user!.id },
     include: { _count: { select: { visitas: true } } },
     orderBy: { nombre: 'asc' },
   });
+
+  const title = isAdmin ? 'Lotes de Productores' : 'Mis Parcelas';
+  const subtitle = isAdmin
+    ? `Gestión fitosanitaria de parcelas activas en Santa Cruz · ${parcelas.length} registradas`
+    : `Tus parcelas activas registradas en el sistema · ${parcelas.length} en total`;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between" data-gsap="stagger">
         <div>
-          <h1 className="font-serif text-2xl text-text-1">Lotes de Productores</h1>
-          <p className="text-text-3 text-sm">Gestión fitosanitaria de parcelas activas en Santa Cruz · {parcelas.length} registradas</p>
+          <h1 className="font-serif text-2xl text-white">{title}</h1>
+          <p className="text-slate-400 text-sm">{subtitle}</p>
         </div>
-        <Link href="/parcelas/nueva">
-          <Button>Nuevo lote</Button>
-        </Link>
+        {!isAdmin && (
+          <Link href="/parcelas/nueva">
+            <Button className="bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 border border-emerald-400/20">Nuevo lote</Button>
+          </Link>
+        )}
       </div>
 
       <div data-gsap="stagger">

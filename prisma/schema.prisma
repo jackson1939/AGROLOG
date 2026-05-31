@@ -19,6 +19,7 @@ model User {
   parcelas     Parcela[]
   visitas      Visita[]
   informes     Informe[]
+  difusiones   DifusionPost[]
 }
 
 enum Role {
@@ -118,4 +119,20 @@ enum TipoInforme {
   MENSUAL
   PARCELA
   CAMPANA
+}
+
+model DifusionPost {
+  id        String         @id @default(cuid())
+  fotoUrl   String?
+  mensaje   String         @db.Text
+  estado    EstadoDifusion @default(PENDIENTE)
+  analisis  Json?
+  createdAt DateTime       @default(now())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id])
+}
+
+enum EstadoDifusion {
+  PENDIENTE
+  ANALIZADO
 }

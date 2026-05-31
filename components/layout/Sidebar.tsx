@@ -2,22 +2,31 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { cn } from '@/lib/utils';
-import { LayoutDashboard, MapPin, ScanLine, ShoppingBag, FileText } from 'lucide-react';
+import { LayoutDashboard, MapPin, ScanLine, ShoppingBag, FileText, MessageSquare } from 'lucide-react';
 import { useLanguage } from '@/lib/language';
 import { LanguageSelector } from './LanguageSelector';
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === 'ADMIN';
   const { t } = useLanguage();
 
-  const navItems = [
-    { href: '/dashboard', label: t('summary', 'sidebar'), icon: LayoutDashboard, badge: null },
-    { href: '/parcelas', label: t('lotes', 'sidebar'), icon: MapPin, badge: null },
-    { href: '/diagnostico', label: t('diagnostico', 'sidebar'), icon: ScanLine, badge: 'GEMINI' },
-    { href: '/marketplace', label: t('marketplace', 'sidebar'), icon: ShoppingBag, badge: '3.5%', highlight: true },
-    { href: '/informes', label: t('informes', 'sidebar'), icon: FileText, badge: null },
-  ];
+  const navItems = isAdmin 
+    ? [
+        { href: '/dashboard', label: t('summary', 'sidebar'), icon: LayoutDashboard, badge: null },
+        { href: '/parcelas', label: 'Lotes de Clientes', icon: MapPin, badge: null },
+        { href: '/comunidad', label: 'Canal Difusión', icon: MessageSquare, badge: 'IA' },
+        { href: '/informes', label: t('informes', 'sidebar'), icon: FileText, badge: null },
+      ]
+    : [
+        { href: '/parcelas', label: 'Mis Parcelas', icon: MapPin, badge: null },
+        { href: '/comunidad', label: 'Comunidad', icon: MessageSquare, badge: null },
+        { href: '/diagnostico', label: t('diagnostico', 'sidebar'), icon: ScanLine, badge: 'GEMINI' },
+        { href: '/marketplace', label: t('marketplace', 'sidebar'), icon: ShoppingBag, badge: '3.5%', highlight: true },
+      ];
 
   return (
     <aside className="hidden lg:flex lg:w-64 lg:flex-col bg-gradient-to-b from-[#0d1a0f] to-[#060d07] text-tierra-100 min-h-screen border-r border-white/5 shadow-2xl">

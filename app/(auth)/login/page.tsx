@@ -12,14 +12,12 @@ import { Sparkles, BrainCircuit, ShoppingBag, ShieldCheck, Compass } from 'lucid
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('demo@agrolog.bo');
+  const [password, setPassword] = useState('campo2024');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
-    const form = new FormData(e.currentTarget);
-    const email = form.get('email') as string;
-    const password = form.get('password') as string;
 
     const result = await signIn('credentials', {
       email,
@@ -36,6 +34,12 @@ export default function LoginPage() {
 
     router.push('/dashboard');
     router.refresh();
+  };
+
+  const handleSelectCredentials = (selectedEmail: string, selectedPass: string) => {
+    setEmail(selectedEmail);
+    setPassword(selectedPass);
+    toast.success(`Cargadas credenciales de: ${selectedEmail.split('@')[0].toUpperCase()}`);
   };
 
   return (
@@ -140,7 +144,8 @@ export default function LoginPage() {
               name="email"
               label="Email de Usuario"
               type="email"
-              defaultValue="demo@agrolog.bo"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="bg-black/30 hover:bg-black/40 focus:bg-black/50 border-white/10 text-white placeholder-white/20 focus:ring-[#4ade80]/30 focus:border-[#4ade80] rounded-xl text-sm"
             />
@@ -152,7 +157,8 @@ export default function LoginPage() {
               name="password"
               label="Contraseña"
               type="password"
-              defaultValue="campo2024"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
               className="bg-black/30 hover:bg-black/40 focus:bg-black/50 border-white/10 text-white placeholder-white/20 focus:ring-[#4ade80]/30 focus:border-[#4ade80] rounded-xl text-sm"
             />
@@ -168,14 +174,40 @@ export default function LoginPage() {
         </form>
 
         {/* Credentials Sandbox Helper */}
-        <div className="mt-8 p-4 rounded-xl bg-white/5 border border-white/10 text-center relative overflow-hidden backdrop-blur-md">
+        <div className="mt-8 p-4 rounded-xl bg-white/5 border border-white/10 relative overflow-hidden backdrop-blur-md">
           <div className="absolute right-2 top-2 opacity-10 select-none text-2xl">🔐</div>
-          <p className="text-[10px] font-mono text-[#4ade80] font-bold">
+          <p className="text-[10px] font-mono text-[#4ade80] font-bold text-center mb-3">
             Credenciales de Demostración:
           </p>
-          <code className="text-[10px] font-mono text-emerald-300 block mt-1.5 bg-white/5 border border-white/5 px-2.5 py-1 rounded inline-block">
-            demo@agrolog.bo <span className="opacity-40">/</span> campo2024
-          </code>
+          <div className="grid grid-cols-2 gap-3">
+            <div 
+              onClick={() => handleSelectCredentials('demo@agrolog.bo', 'campo2024')}
+              className="bg-black/30 border border-white/5 p-2 rounded-lg text-center cursor-pointer hover:bg-emerald-500/5 hover:border-emerald-500/30 active:scale-[0.98] transition-all duration-200"
+            >
+              <span className="text-[10px] font-bold text-white block mb-1">👨‍🌾 Productor / Usuario</span>
+              <code className="text-[9px] font-mono text-emerald-300 block bg-white/5 px-1.5 py-0.5 rounded mb-1">
+                demo@agrolog.bo
+              </code>
+              <code className="text-[9px] font-mono text-white/60 block bg-white/5 px-1.5 py-0.5 rounded">
+                campo2024
+              </code>
+              <div className="text-[#4ade80] text-[9px] font-mono mt-1 font-bold uppercase tracking-wider animate-pulse">¡Haz click!</div>
+            </div>
+            
+            <div 
+              onClick={() => handleSelectCredentials('admin@agrolog.bo', 'admin2024')}
+              className="bg-black/30 border border-amber-500/10 p-2 rounded-lg text-center cursor-pointer hover:bg-amber-500/5 hover:border-amber-500/30 active:scale-[0.98] transition-all duration-200"
+            >
+              <span className="text-[10px] font-bold text-amber-400 block mb-1">👑 Administrador Central</span>
+              <code className="text-[9px] font-mono text-amber-200 block bg-amber-500/10 px-1.5 py-0.5 rounded mb-1">
+                admin@agrolog.bo
+              </code>
+              <code className="text-[9px] font-mono text-white/60 block bg-white/5 px-1.5 py-0.5 rounded">
+                admin2024
+              </code>
+              <div className="text-amber-400 text-[9px] font-mono mt-1 font-bold uppercase tracking-wider animate-pulse">¡Haz click!</div>
+            </div>
+          </div>
         </div>
       </div>
 

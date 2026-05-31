@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { ShoppingBag, Filter, Search, TrendingUp, Sparkles, MessageSquare, CheckCircle2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ShoppingBag, Filter, Search, TrendingUp, Sparkles, MessageSquare, CheckCircle2, BrainCircuit } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -76,6 +76,29 @@ export default function MarketplacePage() {
   const [search, setSearch] = useState('');
   const [purchasedId, setPurchasedId] = useState<string | null>(null);
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [recommendation, setRecommendation] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchLatestRec = async () => {
+      try {
+        const res = await fetch('/api/comunidad');
+        if (res.ok) {
+          const posts = await res.json();
+          // Find first post that has an AI analysis
+          const analyzedPost = posts.find((p: any) => p.estado === 'ANALIZADO' && p.analisis);
+          if (analyzedPost) {
+            setRecommendation(analyzedPost.analisis);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching dynamic recommendation:', err);
+      }
+    };
+    fetchLatestRec();
+    // Poll every 5 seconds for new recommendations!
+    const interval = setInterval(fetchLatestRec, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const categoriesMap: Record<string, string> = {
     'Todos': t('categoryAll', 'marketplace'),
@@ -141,6 +164,29 @@ export default function MarketplacePage() {
           </div>
         </div>
       </div>
+
+      {/* Alerta de Recomendación IA Central */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-gradient-to-r from-amber-500/10 to-transparent border-l-4 border-amber-500 rounded-r-xl p-4 flex items-start gap-3 backdrop-blur-sm"
+      >
+        <BrainCircuit className="w-6 h-6 text-amber-400 shrink-0 mt-0.5" />
+        <div>
+          <h3 className="text-sm font-bold text-amber-400 mb-1">Recomendación AgroLog Central (IA Activa)</h3>
+          <p className="text-xs text-amber-100/80">
+            {recommendation ? (
+              <>
+                Se ha detectado <strong className="text-white">{recommendation.enfermedad}</strong> en la zona (Nivel: <span className="text-red-400 font-bold">{recommendation.gravedad}</span>). Accionador Sugerido: <span className="text-[#4ade80] font-bold">{recommendation.recomendacion}</span>.
+              </>
+            ) : (
+              <>
+                Monitoreando transmisiones en tiempo real. Envía reportes en el Canal de Difusión para activar recomendaciones fitosanitarias de precisión con IA.
+              </>
+            )}
+          </p>
+        </div>
+      </motion.div>
 
       {/* Filters Row */}
       <div className="flex flex-col sm:flex-row gap-3">

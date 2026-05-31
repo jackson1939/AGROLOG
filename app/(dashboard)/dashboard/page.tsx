@@ -78,8 +78,15 @@ async function getDashboardData(userId: string) {
   };
 }
 
+import { redirect } from 'next/navigation';
+
 export default async function DashboardPage() {
   const session = await auth();
+  
+  if (session?.user?.role !== 'ADMIN') {
+    redirect('/parcelas');
+  }
+
   const data = await getDashboardData(session!.user!.id);
 
   const cropCounts = data.allParcelas.reduce((acc, p) => {
